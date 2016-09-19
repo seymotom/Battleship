@@ -34,19 +34,22 @@ class BattleshipViewController: UIViewController {
         let r = (sender.tag - 1) / brain.columns
         let c = (sender.tag - 1) % brain.columns
         
+        brain.placeCoordinate(r: r, c: c)
+        sender.backgroundColor = .yellow
+        
         // note how the strike itself isn't updating the interface
-        _ = brain.strike(atRow: r, andColumn: c)
+        //_ = brain.strike(atRow: r, andColumn: c)
         
         // redraw the whole board
-        drawBoard()
+        //drawBoard()
         
         // check for win
-        if brain.gameFinished() {
-            messageLabel.text = "You win!"
-        }
-        else {
-            messageLabel.text = "Keep guessing"
-        }
+//        if brain.gameFinished() {
+//            messageLabel.text = "You win!"
+//        }
+//        else {
+//            messageLabel.text = "Keep guessing"
+//        }
     }
     
     func drawBoard() {
@@ -107,10 +110,51 @@ class BattleshipViewController: UIViewController {
         drawBoard()
     }
     
+    @IBAction func computerPlayer(_ sender: UIButton) {
+        messageLabel.text = "Ships set. CPU now playing."
+        drawBoard()
+        cpuPlaysTheGame()
+        
+        
+        
+    }
+    
+    func cpuPlaysTheGame() {
+        outer: for r in 0..<brain.rows {
+            inner: for c in 0..<brain.columns {
+                // note how the strike itself isn't updating the interface
+                _ = brain.strike(atRow: r, andColumn: c)
+                
+                // redraw the whole board
+                drawBoard()
+                
+                // check for win
+                if brain.gameFinished() {
+                    messageLabel.text = "CPU wins!"
+                    disableGameButtons(view: gridView)
+                    break outer
+                }
+                else {
+                    messageLabel.text = "Keep guessing"
+                }
+            }
+        }
+    }
+    
+    
     func startGame() {
         brain.resetBoard()
         setUpGameButtons(v: gridView)
-        messageLabel.text = "Good luck"
+        messageLabel.text = "place your Battleships"
+    }
+    
+    func disableGameButtons(view: UIView) {
+        for v in view.subviews {
+            if let button = v as? UIButton {
+                button.isEnabled = false
+            }
+        }
+        
     }
     
     @IBAction func resetTapped(_ sender: UIButton) {

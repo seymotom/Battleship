@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 class BattleBrain {
     let numSquares: Int
     let numColumns: Int
@@ -30,9 +29,6 @@ class BattleBrain {
     }
     
     var currentShipType = ""
-    
-    //number of columns
-//    let c = 8
     
     private var carrier: [Int] = []
     private var battleship: [Int] = []
@@ -130,7 +126,6 @@ class BattleBrain {
             squares[spot] = .des
         }
     }
-
     
     func checkSquare(_ squareIn: Int) -> Bool {
         currentShipType = squares[squareIn].rawValue

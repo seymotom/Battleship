@@ -12,7 +12,8 @@ import UIKit
 class BattleshipViewController: UIViewController {
     
     @IBOutlet weak var gameLabel: UILabel!
-    @IBOutlet weak var buttonContainer: UIView!
+    @IBOutlet weak var buttonContainer: UIView!    
+    @IBOutlet weak var scoreCard: UILabel!
     
     let howManySquares: Int
     let howManyColumns: Int
@@ -21,9 +22,13 @@ class BattleshipViewController: UIViewController {
     var loaded: Bool
     let resetTitle = "RESET"
     
+    var missCounter = 0
+    var currentScore = 100
+    var scores: [Int] = [0, 0, 0]
+    
     required init?(coder aDecoder: NSCoder) {
-        self.howManySquares = 100
-        self.howManyColumns = 10
+        self.howManySquares = 100     //Must be a square number... 36, 49, 64, 81, 100, 121 or 144
+        self.howManyColumns = Int(sqrt(Double(self.howManySquares)))
         self.loaded = false
         self.brain = BattleBrain(numSquares: self.howManySquares, numColumns: self.howManyColumns)
         super.init(coder: aDecoder)
@@ -53,7 +58,9 @@ class BattleshipViewController: UIViewController {
     func handleReset() {
         resetButtonColors()
         brain.setupSquares(n: howManySquares, col: howManyColumns)
-        setUpGameLabel()        
+        setUpGameLabel()
+        scoreCard.text = ""
+        scoreCard.backgroundColor = .white
     }
     
     func disableCardButtons() {
@@ -62,6 +69,17 @@ class BattleshipViewController: UIViewController {
                 button.isEnabled = false
             }
         }
+    }
+    
+    func processScore() {
+        scores.append(currentScore)
+        currentScore = 100
+        missCounter = 0
+        let topScores = scores.sorted(by: >)
+        scoreCard.backgroundColor = .blue
+        scoreCard.text = "HIGH SCORES: \n1: \(topScores[0]) \n2: \(topScores[1]) \n3: \(topScores[2])"
+        
+
     }
     
     @IBAction func resetTapped(_ sender: UIButton) {
@@ -75,17 +93,28 @@ class BattleshipViewController: UIViewController {
             gameLabel.text = "YOU HIT MY \(brain.currentShipType)"
             sender.backgroundColor = UIColor.red
             sender.isEnabled = false
+            scoreCard.backgroundColor = .blue
+            currentScore += 50
+            scoreCard.text = "SCORE: \(currentScore)"
             if brain.sunkShip(ship: brain.currentShipType) == true {
                 gameLabel.text = "YOU SUNK MY \(brain.currentShipType)"
+                currentScore *= 2
+                scoreCard.backgroundColor = .blue
+                scoreCard.text = "SCORE: \(currentScore)"
             }
             if brain.checkWin() == true {
                 disableCardButtons()
                 gameLabel.text = "YOU SUNK ALL MY SHIPS!!!"
-            }                        
+                processScore()
+            }
         } else {
             gameLabel.text = "MISS"
             sender.backgroundColor = UIColor.lightGray
             sender.isEnabled = false
+            missCounter += 1
+            currentScore -= missCounter
+            scoreCard.backgroundColor = .red
+            scoreCard.text = "SCORE: \(currentScore)"
         }
     }
     
@@ -104,6 +133,7 @@ class BattleshipViewController: UIViewController {
             button.tag = i
             button.backgroundColor = UIColor.blue
             button.setTitle("\(i)", for: UIControlState())
+            button.titleLabel?.adjustsFontSizeToFitWidth = true
             button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
             v.addSubview(button)
         }

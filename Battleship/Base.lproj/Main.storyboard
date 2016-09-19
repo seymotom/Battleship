@@ -20,39 +20,49 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Er-Ej-rxc">
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gg4-Gh-OtI">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zJf-pe-PH2">
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <state key="normal" title="RESET">
-                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="resetTapped:" destination="9pv-A4-QxB" eventType="touchUpInside" id="qWF-8a-hgo"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="144" placeholderIntrinsicHeight="144" text="" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="Xuf-TH-AD7">
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="zJf-pe-PH2" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="40" id="Isn-Ao-WSD"/>
                             <constraint firstItem="5Er-Ej-rxc" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="20" id="Lj2-z6-Idh"/>
                             <constraint firstItem="gg4-Gh-OtI" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leading" constant="5" id="TMI-A8-fMs"/>
-                            <constraint firstItem="5Er-Ej-rxc" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="40" id="X7T-gv-0kd"/>
+                            <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="Xuf-TH-AD7" secondAttribute="bottom" constant="20" id="Vpa-ej-jKX"/>
+                            <constraint firstItem="5Er-Ej-rxc" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="20" id="X7T-gv-0kd"/>
                             <constraint firstItem="gg4-Gh-OtI" firstAttribute="top" secondItem="5Er-Ej-rxc" secondAttribute="bottom" constant="20" id="dVv-1m-3kh"/>
                             <constraint firstItem="zJf-pe-PH2" firstAttribute="top" secondItem="gg4-Gh-OtI" secondAttribute="bottom" constant="20" id="nGn-b8-Krj"/>
                             <constraint firstAttribute="trailing" secondItem="gg4-Gh-OtI" secondAttribute="trailing" constant="5" id="oz7-eU-saM"/>
+                            <constraint firstItem="zJf-pe-PH2" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="20" id="q2n-aV-1JU"/>
                             <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="zJf-pe-PH2" secondAttribute="bottom" constant="20" id="sxn-OG-hOS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Xuf-TH-AD7" secondAttribute="trailing" constant="20" id="wHU-xz-7vn"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="First" image="first" id="acW-dT-cKf"/>
                     <connections>
                         <outlet property="buttonContainer" destination="gg4-Gh-OtI" id="2t6-3S-zIf"/>
                         <outlet property="gameLabel" destination="5Er-Ej-rxc" id="8Kk-Bd-a4X"/>
+                        <outlet property="scoreCard" destination="Xuf-TH-AD7" id="ZDm-Gk-yAh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>

@@ -66,8 +66,8 @@ class BattleBrain {
             //set start position dynamically on the left using modulo of the columns
             //c is the number of columns in the grid
             start = Int(arc4random_uniform(UInt32(numSquares))) + 1
-            if start % c > (c - (n - 1)) {
-                start = start - (n - 1)
+            if start % c > (c - n) {
+                start = start - n
             }
             for i in 0..<n {
                 ship.append(start + i)

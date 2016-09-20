@@ -11,9 +11,12 @@ import Foundation
 
 class BattleshipBrain {
     enum Coordinate {
-        enum Ship {
-            case carrier(Int)
-            case battleship(Int)
+        enum Ship: String {
+            case carrier = "CARRIER"
+            case battleship = "BATTLESHIP"
+            case cruiser = "CRUISER"
+            case submarine = "SUBMARINE"
+            case destroyer = "DESTROYER"
         }
         enum State {
             case hidden, shown
@@ -50,14 +53,13 @@ class BattleshipBrain {
         setupBoard()
     }
     
-    func placeCoordinate(r: Int, c: Int) {
-        coordinates[r][c] = Coordinate.occupied(.hidden, .carrier(5))
+    func placeCoordinate(r: Int, c: Int, shipType: BattleshipBrain.Coordinate) {
+        coordinates[r][c] = shipType
     }
     
     func setupBoard() {
-        for r in 0..<rows {
-            self.coordinates.append([Coordinate](repeating: .empty(.hidden), count: columns))
-            
+        for _ in 0..<rows {
+            self.coordinates.append([Coordinate](repeating: .empty(.hidden), count: columns))            
             // this just sets one hit per column
             // coordinates[r][Int(arc4random_uniform(UInt32(columns)))] = Coordinate.occupied(.hidden, .carrier(5))
         }
@@ -75,6 +77,20 @@ class BattleshipBrain {
     func strike(atRow r: Int, andColumn c: Int) -> Bool {
         return coordinates[r][c].tryToHit()
     }
+    
+    func getCurrentSquare(r: Int, c: Int) -> Coordinate {
+        return coordinates[r][c]
+    }
+    
+//    func shipSunk(coord: BattleshipBrain.Coordinate) -> Bool {
+//        var counter = 0
+//        for r in 0..<rows {
+//            for c in 0..<columns {
+//            
+//            }
+//        }
+//        return false
+//    }
     
     func gameFinished() -> Bool {
         for r in 0..<rows {

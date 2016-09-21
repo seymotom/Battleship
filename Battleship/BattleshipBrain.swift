@@ -82,15 +82,16 @@ class BattleshipBrain {
         return coordinates[r][c]
     }
     
-//    func shipSunk(coord: BattleshipBrain.Coordinate) -> Bool {
-//        var counter = 0
-//        for r in 0..<rows {
-//            for c in 0..<columns {
-//            
-//            }
-//        }
-//        return false
-//    }
+    func shipSunk(ship: BattleshipBrain.Coordinate.Ship) -> Bool {
+        for r in 0..<rows {
+            for c in 0..<columns {
+                if case .occupied(.hidden, ship) = coordinates[r][c] {
+                    return false
+                }
+            }
+        }
+        return true
+    }
     
     func gameFinished() -> Bool {
         for r in 0..<rows {

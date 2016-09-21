@@ -18,12 +18,6 @@ class BattleshipViewController: UIViewController {
     var gameBoardBeingSet = true
     var buttonTappedCounter = 0
     
-    var carrierCount = 5
-    var battleshipCount = 4
-    var cruiserCount = 3
-    var submarineCount = 3
-    var destroyerCount = 2
-    
     required init?(coder aDecoder: NSCoder) {
         self.brain = BattleshipBrain(rows: 10, columns: 10)
         super.init(coder: aDecoder)
@@ -34,7 +28,6 @@ class BattleshipViewController: UIViewController {
     
         // better than viewDidLayoutSubviews but not all the way there
         self.view.layoutIfNeeded()
-        
         startGame()
     }
     
@@ -43,18 +36,15 @@ class BattleshipViewController: UIViewController {
         let r = (sender.tag - 1) / brain.columns
         let c = (sender.tag - 1) % brain.columns
         buttonTappedCounter += 1
-
         
         if gameBoardBeingSet {
             sender.backgroundColor = .yellow
             sender.isEnabled = false
-            
             switch buttonTappedCounter {
             case 0:
                 messageLabel.text = "ERROR"
             case 1...5:
                 brain.placeCoordinate(r: r, c: c, shipType: .occupied(.hidden, .carrier))
-                
                 if buttonTappedCounter == 5 {
                     messageLabel.text = "CARRIER SET.\nPLACE YOUR BATTLESHIP\nON 4 CONSECUTIVE SQUARES."
                 }
@@ -83,7 +73,6 @@ class BattleshipViewController: UIViewController {
                 messageLabel.text = "PLAY BATTLESHIP."
                 gameBoardBeingSet = false
                 enableGameButtons(view: gridView)
-                
             default:
                 break
             }
@@ -99,42 +88,13 @@ class BattleshipViewController: UIViewController {
                 messageLabel.text = "MISS"
             case .occupied(_, let ship):
                 messageLabel.text = "YOU HIT MY \(ship.rawValue)"
-                switch ship {
-                case .carrier:
-                    carrierCount -= 1
-                    if carrierCount == 0 {
-                        messageLabel.text = "YOU SUNK MY \(ship.rawValue)"
-                    }
-                case .battleship:
-                    battleshipCount -= 1
-                    if battleshipCount == 0 {
-                        messageLabel.text = "YOU SUNK MY \(ship.rawValue)"
-                    }
-                case.cruiser:
-                    cruiserCount -= 1
-                    if cruiserCount == 0 {
-                        messageLabel.text = "YOU SUNK MY \(ship.rawValue)"
-                    }
-                case .submarine:
-                    submarineCount -= 1
-                    if submarineCount == 0 {
-                        messageLabel.text = "YOU SUNK MY \(ship.rawValue)"
-                    }
-                case .destroyer:
-                    destroyerCount -= 1
-                    if destroyerCount == 0 {
-                        messageLabel.text = "YOU SUNK MY \(ship.rawValue)"
-                    }
-
+                            }
+            if case .occupied(_, let ship) = currentSquare {
+                if brain.shipSunk(ship: ship) {
+                    messageLabel.text = "WITH THE FUNCTION\nYOU SUNK MY \(ship.rawValue)"
                 }
             }
             
-            //check for sunken ship
-            
-//            if brain.shipSunk(coord: currentSquare) {
-//                
-//            }
-
             // check for win
             if brain.gameFinished() {
                 messageLabel.text = "YOU SUNK ALL SHIPS.\nWINNER!"
@@ -207,8 +167,6 @@ class BattleshipViewController: UIViewController {
         drawBoard()
         cpuPlaysTheGame()
         
-        
-        
     }
     
     func cpuPlaysTheGame() {
@@ -232,23 +190,12 @@ class BattleshipViewController: UIViewController {
             }
         }
     }
-    
-    
+        
     func startGame() {
         brain.resetBoard()
         setUpGameButtons(v: gridView)
         messageLabel.text = "WELCOME TO BATTLESHIP.\nPLACE YOUR CARRIER\nON 5 CONSECUTIVE SQUARES."
-        resetGameVariables()
-        
-    }
-    
-    func resetGameVariables() {
         gameBoardBeingSet = true
-        carrierCount = 5
-        battleshipCount = 4
-        cruiserCount = 3
-        submarineCount = 3
-        destroyerCount = 2
     }
     
     func disableGameButtons(view: UIView) {

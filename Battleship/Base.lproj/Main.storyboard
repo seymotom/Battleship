@@ -26,47 +26,48 @@
                                     <constraint firstAttribute="width" secondItem="b5i-v0-MPB" secondAttribute="height" multiplier="1:1" id="W2J-mh-67W"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WSH-9H-ETZ">
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WSH-9H-ETZ">
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bdc-rH-YFA">
-                                <state key="normal" title="Reset"/>
-                                <connections>
-                                    <action selector="resetTapped:" destination="9pv-A4-QxB" eventType="touchUpInside" id="KWc-P1-DeB"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jKX-LV-FWl">
-                                <state key="normal" title="CPU Play"/>
+                                <state key="normal" title="RESET"/>
                                 <connections>
                                     <action selector="computerPlayer:" destination="9pv-A4-QxB" eventType="touchUpInside" id="vRx-j6-Rbb"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bdc-rH-YFA">
+                                <state key="normal" title="START"/>
+                                <connections>
+                                    <action selector="resetTapped:" destination="9pv-A4-QxB" eventType="touchUpInside" id="KWc-P1-DeB"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="jKX-LV-FWl" secondAttribute="bottom" constant="20" id="BhU-79-9No"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="bdc-rH-YFA" secondAttribute="trailing" id="CRo-Fb-U9a"/>
-                            <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="WSH-9H-ETZ" secondAttribute="bottom" constant="17" id="TJi-5t-dO2"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="bdc-rH-YFA" secondAttribute="trailing" constant="20" id="TIw-5h-3Cx"/>
+                            <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="WSH-9H-ETZ" secondAttribute="bottom" constant="50" id="TJi-5t-dO2"/>
                             <constraint firstAttribute="trailingMargin" secondItem="b5i-v0-MPB" secondAttribute="trailing" id="Zuo-Fi-tW4"/>
                             <constraint firstItem="jKX-LV-FWl" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="20" id="aY9-OW-sYE"/>
                             <constraint firstItem="b5i-v0-MPB" firstAttribute="top" secondItem="Ia1-K6-d13" secondAttribute="bottom" constant="100" id="eJp-CV-wgN"/>
                             <constraint firstItem="WSH-9H-ETZ" firstAttribute="centerX" secondItem="tsR-hK-woN" secondAttribute="centerX" id="k3Q-H2-Nd2"/>
                             <constraint firstItem="b5i-v0-MPB" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" id="lR9-DJ-F7P"/>
-                            <constraint firstItem="WSH-9H-ETZ" firstAttribute="top" secondItem="b5i-v0-MPB" secondAttribute="bottom" constant="20" id="nNB-sL-gf8"/>
-                            <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="bdc-rH-YFA" secondAttribute="bottom" constant="13" id="sin-tM-Nj0"/>
+                            <constraint firstItem="WSH-9H-ETZ" firstAttribute="top" secondItem="b5i-v0-MPB" secondAttribute="bottom" constant="5" id="nNB-sL-gf8"/>
+                            <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="bdc-rH-YFA" secondAttribute="bottom" constant="20" id="sin-tM-Nj0"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="First" image="first" id="acW-dT-cKf"/>
                     <connections>
+                        <outlet property="buttonLabel" destination="bdc-rH-YFA" id="Rns-76-baX"/>
                         <outlet property="gridView" destination="b5i-v0-MPB" id="c8b-j9-abD"/>
                         <outlet property="messageLabel" destination="WSH-9H-ETZ" id="mYl-tE-HSL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="750" y="-320"/>
+            <point key="canvasLocation" x="749.60000000000002" y="-320.68965517241384"/>
         </scene>
         <!--Second-->
         <scene sceneID="wg7-f3-ORb">

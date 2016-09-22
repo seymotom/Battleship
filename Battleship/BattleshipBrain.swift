@@ -60,8 +60,6 @@ class BattleshipBrain {
     func setupBoard() {
         for _ in 0..<rows {
             self.coordinates.append([Coordinate](repeating: .empty(.hidden), count: columns))            
-            // this just sets one hit per column
-            // coordinates[r][Int(arc4random_uniform(UInt32(columns)))] = Coordinate.occupied(.hidden, .carrier(5))
         }
     }
     

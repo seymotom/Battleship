@@ -26,28 +26,48 @@
                                     <constraint firstAttribute="width" secondItem="b5i-v0-MPB" secondAttribute="height" multiplier="1:1" id="W2J-mh-67W"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WSH-9H-ETZ">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WSH-9H-ETZ">
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jKX-LV-FWl">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="9E3-Mw-qxf"/>
+                                    <constraint firstAttribute="height" constant="30" id="Tu7-qv-BnO"/>
+                                </constraints>
                                 <state key="normal" title="RESET"/>
                                 <connections>
-                                    <action selector="computerPlayer:" destination="9pv-A4-QxB" eventType="touchUpInside" id="vRx-j6-Rbb"/>
+                                    <action selector="resetGame:" destination="9pv-A4-QxB" eventType="touchUpInside" id="9Rh-wB-6uW"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bdc-rH-YFA">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="5Eo-pf-SfK"/>
+                                    <constraint firstAttribute="height" constant="30" id="uBc-aO-1AL"/>
+                                </constraints>
                                 <state key="normal" title="START"/>
                                 <connections>
-                                    <action selector="resetTapped:" destination="9pv-A4-QxB" eventType="touchUpInside" id="KWc-P1-DeB"/>
+                                    <action selector="startSwitchTapped:" destination="9pv-A4-QxB" eventType="touchUpInside" id="82o-vd-VDT"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VuV-E3-k7q">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="sgs-jz-F2w"/>
+                                    <constraint firstAttribute="width" constant="100" id="yWn-UN-vlJ"/>
+                                </constraints>
+                                <state key="normal" title="or CPU as P2"/>
+                                <connections>
+                                    <action selector="playAgainstCpu:" destination="9pv-A4-QxB" eventType="touchUpInside" id="Khg-hr-09H"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="jKX-LV-FWl" secondAttribute="bottom" constant="20" id="BhU-79-9No"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="bdc-rH-YFA" secondAttribute="trailing" constant="20" id="TIw-5h-3Cx"/>
+                            <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="VuV-E3-k7q" secondAttribute="bottom" constant="20" id="Eds-NL-PEE"/>
+                            <constraint firstItem="bdc-rH-YFA" firstAttribute="leading" secondItem="jKX-LV-FWl" secondAttribute="trailing" constant="20" id="Fta-T5-8QA"/>
+                            <constraint firstItem="VuV-E3-k7q" firstAttribute="leading" secondItem="bdc-rH-YFA" secondAttribute="trailing" constant="20" id="LMI-vR-OBv"/>
                             <constraint firstItem="4ug-Mw-9AY" firstAttribute="top" secondItem="WSH-9H-ETZ" secondAttribute="bottom" constant="50" id="TJi-5t-dO2"/>
                             <constraint firstAttribute="trailingMargin" secondItem="b5i-v0-MPB" secondAttribute="trailing" id="Zuo-Fi-tW4"/>
                             <constraint firstItem="jKX-LV-FWl" firstAttribute="leading" secondItem="tsR-hK-woN" secondAttribute="leadingMargin" constant="20" id="aY9-OW-sYE"/>
@@ -60,9 +80,10 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="First" image="first" id="acW-dT-cKf"/>
                     <connections>
-                        <outlet property="buttonLabel" destination="bdc-rH-YFA" id="Rns-76-baX"/>
+                        <outlet property="cpuButtonLabel" destination="VuV-E3-k7q" id="nDX-f3-SLo"/>
                         <outlet property="gridView" destination="b5i-v0-MPB" id="c8b-j9-abD"/>
                         <outlet property="messageLabel" destination="WSH-9H-ETZ" id="mYl-tE-HSL"/>
+                        <outlet property="startSwitchLabel" destination="bdc-rH-YFA" id="T95-Al-pl7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>

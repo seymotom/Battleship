@@ -16,15 +16,21 @@ class BattleshipViewController: UIViewController {
     let p1Brain: BattleshipBrain
     let p2Brain: BattleshipBrain
     
-    enum gameState {
+    enum GameState {
+        enum UserOrCpu {
+            case user
+            case cpu
+        }
         case p1BoardBeingSet
         case p1GameBeingPlayed
-        case p2BoardBeingSet
-        case p2GameBeingPlayed
+        case p2BoardBeingSet(UserOrCpu)
+        case p2GameBeingPlayed(UserOrCpu)
+        case gameOver
     }
     
-    var stateOfTheGame = gameState.p1BoardBeingSet
+    var stateOfTheGame = GameState.p1BoardBeingSet
     var buttonTappedCounter = 0
+    var cpuIsPlaying = false
     
     required init?(coder aDecoder: NSCoder) {
         let x = 10
@@ -35,7 +41,6 @@ class BattleshipViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
         // better than viewDidLayoutSubviews but not all the way there
         self.view.layoutIfNeeded()
         startGame()
@@ -77,16 +82,17 @@ class BattleshipViewController: UIViewController {
             case 16...17:
                 p1Brain.placeCoordinate(r: r, c: c, shipType: .occupied(.hidden, .destroyer))
                 if buttonTappedCounter == 17 {
-                    messageLabel.text = "P1 DESTROYER SET.\nALL P1 SHIPS NOW SET\nPRESS SWITCH FOR PLAYER 2."
+                    messageLabel.text = "P1 DESTROYER SET.\nALL P1 SHIPS NOW SET.\nPRESS SWITCH FOR PLAYER 2."
+                    cpuButtonLabel.setTitle("CPU as P2", for: .normal)
                     disableGameButtons(view: gridView)
                 }
             default:
                 break
             }
 
-            case .p2BoardBeingSet:
-            buttonLabel.setTitle("START", for: .normal)
-            sender.backgroundColor = .orange
+        case .p2BoardBeingSet(.user):
+            startSwitchLabel.setTitle("START", for: .normal)
+            sender.backgroundColor = .yellow
             sender.isEnabled = false
             switch buttonTappedCounter {
             case 0:
@@ -114,12 +120,15 @@ class BattleshipViewController: UIViewController {
             case 16...17:
                 p2Brain.placeCoordinate(r: r, c: c, shipType: .occupied(.hidden, .destroyer))
                 if buttonTappedCounter == 17 {
-                    messageLabel.text = "P2 DESTROYER SET.\nALL P2 SHIPS NOW SET\nPRESS START TO PLAY."
+                    messageLabel.text = "P2 DESTROYER SET.\nALL P2 SHIPS NOW SET.\nPRESS START TO PLAY."
                     disableGameButtons(view: gridView)
                 }
             default:
                 break
             }
+            
+        case .p2BoardBeingSet(.cpu):
+            break
             
         case .p1GameBeingPlayed:
             // note how the strike itself isn't updating the interface
@@ -139,8 +148,12 @@ class BattleshipViewController: UIViewController {
             }
             // check for win
             if p2Brain.gameFinished() {
+                stateOfTheGame = .gameOver
                 messageLabel.text = "PLAYER 1 SUNK ALL P2 SHIPS.\nPLAYER 1 WINS!"
-                 buttonLabel.setTitle("P2 SUCKS", for: .normal)
+                startSwitchLabel.setTitle("", for: .normal)
+                messageLabel.backgroundColor = .darkGray
+                messageLabel.textColor = .white
+
             }
             disableGameButtons(view: gridView)
 
@@ -162,9 +175,15 @@ class BattleshipViewController: UIViewController {
             }
             // check for win
             if p1Brain.gameFinished() {
+                stateOfTheGame = .gameOver
                 messageLabel.text = "PLAYER 2 SUNK ALL P1 SHIPS.\nPLAYER 2 WINS!"
-                buttonLabel.setTitle("", for: .normal)
+                messageLabel.backgroundColor = .darkGray
+                messageLabel.textColor = .white
+                startSwitchLabel.setTitle("", for: .normal)
             }
+            disableGameButtons(view: gridView)
+            
+        case .gameOver:
             disableGameButtons(view: gridView)
         }
     }
@@ -216,7 +235,7 @@ class BattleshipViewController: UIViewController {
                     case .occupied(let state, _):
                         switch state {
                         case .shown:
-                            button.backgroundColor = UIColor.green
+                            button.backgroundColor = UIColor.orange
                         case .hidden:
                             button.backgroundColor = UIColor.cyan
                         }
@@ -254,36 +273,9 @@ class BattleshipViewController: UIViewController {
         }
     }
     
-    @IBAction func computerPlayer(_ sender: UIButton) {
-//        messageLabel.text = "Ships set. CPU now playing."
-//        stateOfTheGame = .p1BoardBeingSet
-//        p1DrawBoard()
-//        cpuPlaysTheGame()
+    @IBAction func resetGame(_ sender: UIButton) {
         startGame()
-        
     }
-    
-//    func cpuPlaysTheGame() {
-//        outer: for r in 0..<p1Brain.rows {
-//            inner: for c in 0..<p1Brain.columns {
-//                // note how the strike itself isn't updating the interface
-//                _ = p1Brain.strike(atRow: r, andColumn: c)
-//                
-//                // redraw the whole board
-//                p1DrawBoard()
-//                
-//                // check for win
-//                if p1Brain.gameFinished() {
-//                    messageLabel.text = "CPU wins!"
-//                    disableGameButtons(view: gridView)
-//                    break outer
-//                }
-//                else {
-//                    messageLabel.text = "Keep guessing"
-//                }
-//            }
-//        }
-//    }
     
     func startGame() {
         p1Brain.resetBoard()
@@ -291,9 +283,13 @@ class BattleshipViewController: UIViewController {
         setUpGameButtons(v: gridView)
         p1DrawBoard()
         messageLabel.text = "WELCOME TO BATTLESHIP PLAYER 1.\nPLACE YOUR CARRIER\nON 5 CONSECUTIVE SQUARES."
+        messageLabel.backgroundColor = UIColor.clear
+        messageLabel.textColor = .darkGray
+
         stateOfTheGame = .p1BoardBeingSet
         buttonTappedCounter = 0
-        buttonLabel.setTitle("SWITCH", for: UIControlState())
+        startSwitchLabel.setTitle("SWITCH", for: .normal)
+        cpuButtonLabel.setTitle("", for: .normal)
     }
     
     func disableGameButtons(view: UIView) {
@@ -312,36 +308,113 @@ class BattleshipViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var buttonLabel: UIButton!
+    @IBOutlet weak var startSwitchLabel: UIButton!
     
-    @IBAction func resetTapped(_ sender: UIButton) {
+    @IBAction func startSwitchTapped(_ sender: UIButton) {
         switch stateOfTheGame {
         case .p1BoardBeingSet:
             p2DrawBoard()
             messageLabel.text = "WELCOME TO BATTLESHIP PLAYER 2.\nPLACE YOUR CARRIER\nON 5 CONSECUTIVE SQUARES."
             enableGameButtons(view: gridView)
-            stateOfTheGame = .p2BoardBeingSet
-            buttonLabel.setTitle("SWITCH->P1", for: UIControlState())
+            stateOfTheGame = .p2BoardBeingSet(.user)
+            startSwitchLabel.setTitle("SWITCH->P1", for: .normal)
+            cpuButtonLabel.setTitle("", for: .normal)
             buttonTappedCounter = 0
             enableGameButtons(view: gridView)
-        case .p2BoardBeingSet:
+            
+        case .p2BoardBeingSet(.user):
             stateOfTheGame = .p1GameBeingPlayed
             p2DrawBoard()
             messageLabel.text = "PLAY BATTLESHIP.\nPLAYER 1 TO FIRE."
-            buttonLabel.setTitle("SWITCH->P2", for: UIControlState())
+            startSwitchLabel.setTitle("SWITCH->P2", for: .normal)
             enableGameButtons(view: gridView)
+            
         case .p1GameBeingPlayed:
-            stateOfTheGame = .p2GameBeingPlayed
+            if cpuIsPlaying {
+                stateOfTheGame = .p2GameBeingPlayed(.cpu)
+                let rAndC = p2Brain.chooseStrike()
+                let r = rAndC[0]
+                let c = rAndC[1]
+                let letter = String(Character(UnicodeScalar(65 + r)!))
+                _ = p1Brain.strike(atRow: r, andColumn: c)
+                let currentSquare = p1Brain.getCurrentSquare(r: r, c: c)
+                switch currentSquare {
+                case .empty(_):
+                    messageLabel.text = "'' \(letter), \(c + 1) ''\nPLAYER 2 MISSED\n'' Bollocks! '' 😠"
+                case .occupied(_, let ship):
+                    messageLabel.text = "'' \(letter), \(c + 1) ''\nPLAYER 2 HIT THE P1 \(ship.rawValue)\n'' Booyah! '' 😊"
+                }
+                if case .occupied(_, let ship) = currentSquare {
+                    if p1Brain.shipSunk(ship: ship) {
+                        messageLabel.text = "'' \(letter), \(c + 1) ''\nPLAYER 2 SUNK THE P1 \(ship.rawValue)\n'' In your motherfloating face!!! '' 😈"
+                    }
+                }
+                if p1Brain.gameFinished() {
+                    stateOfTheGame = .gameOver
+                    messageLabel.text = "'' \(letter), \(c + 1) ''\nPLAYER 2 SUNK ALL P1 SHIPS.\nPLAYER 2 WINS!\n'' I win. You sunking suck! '' 😃"
+                    startSwitchLabel.setTitle("", for: .normal)
+                    messageLabel.backgroundColor = .darkGray
+                    messageLabel.textColor = .white
+
+                }
+                disableGameButtons(view: gridView)
+            } else {
+                stateOfTheGame = .p2GameBeingPlayed(.user)
+                enableGameButtons(view: gridView)
+                startSwitchLabel.setTitle("SWITCH->P2", for: .normal)
+                messageLabel.text = "PLAYER 2 TO FIRE."
+            }
             p1DrawBoard()
-            enableGameButtons(view: gridView)
-            buttonLabel.setTitle("SWITCH->P2", for: UIControlState())
-            messageLabel.text = "PLAYER 2 TO FIRE."
-        case .p2GameBeingPlayed:
+            startSwitchLabel.setTitle("SWITCH->P2", for: .normal)
+            
+        case .p2GameBeingPlayed(.user):
             stateOfTheGame = .p1GameBeingPlayed
             p2DrawBoard()
             enableGameButtons(view: gridView)
-            buttonLabel.setTitle("SWITCH->P1", for: UIControlState())
+            startSwitchLabel.setTitle("SWITCH->P1", for: UIControlState())
             messageLabel.text = "PLAYER 1 TO FIRE."
+            
+        case .p2BoardBeingSet(.cpu):
+            stateOfTheGame = .p1GameBeingPlayed
+            p2DrawBoard()
+            messageLabel.text = "PLAY BATTLESHIP.\nPLAYER 1 TO FIRE ON CPU\n'' Good luck loser. ''."
+            startSwitchLabel.setTitle("SWITCH->P2", for: UIControlState())
+            enableGameButtons(view: gridView)
+            
+        case .p2GameBeingPlayed(.cpu):
+            stateOfTheGame = .p1GameBeingPlayed
+            p2DrawBoard()
+            enableGameButtons(view: gridView)
+            startSwitchLabel.setTitle("SWITCH->P1", for: UIControlState())
+            messageLabel.text = "PLAYER 1 TO FIRE."
+        
+        case .gameOver:
+            break
+
+        }
+    }
+    
+    @IBOutlet weak var cpuButtonLabel: UIButton!
+    
+    @IBAction func playAgainstCpu(_ sender: UIButton) {
+        switch stateOfTheGame {
+        case .p1BoardBeingSet:
+            cpuIsPlaying = true
+            disableGameButtons(view: gridView)
+            stateOfTheGame = .p2BoardBeingSet(.cpu)
+            p2Brain.setUpP2Ships()
+            messageLabel.text = "'' I have positioned my ships\nPress START to play me bitch. ''"
+            startSwitchLabel.setTitle("START", for: .normal)
+            cpuButtonLabel.setTitle("", for: .normal)
+            
+        case .p1GameBeingPlayed:
+            break
+        case .p2BoardBeingSet:
+            break
+        case .p2GameBeingPlayed:
+            break
+        case .gameOver:
+            break
         }
     }
 }

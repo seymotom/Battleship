@@ -46,6 +46,14 @@ class BattleshipBrain {
 
     private var coordinates: [[Coordinate]]
     
+    private var previousStrikes: [(Int, Int)] = []
+    private var carPos: [(Int, Int)] = []
+    private var batPos: [(Int, Int)] = []
+    private var cruPos: [(Int, Int)] = []
+    private var subPos: [(Int, Int)] = []
+    private var desPos: [(Int, Int)] = []
+    private var allShips: [(Int, Int)] = []
+    
     init(rows: Int, columns: Int){
         self.rows = rows
         self.columns = columns
@@ -101,5 +109,110 @@ class BattleshipBrain {
             }
         }
         return true
+    }
+    
+    //Unique ship checking function
+    private func shipIsUnique(arrA: [(Int, Int)],arrB: [(Int, Int)]) -> Bool {
+        var unique = true
+        for a in arrA {
+            for b in arrB {
+                if a == b {
+                    unique = false
+                }
+            }
+        }
+        return unique
+    }
+    
+    //Ship positioning function
+    private func buildShip(ofLength n: Int) -> [(Int, Int)] {
+        var ship: [(Int, Int)] = []
+        var start = (0, 0)
+        switch Int(arc4random_uniform(UInt32(2))) {
+        case 0: //horizontal
+            start = ( Int(arc4random_uniform(UInt32(self.rows))), Int(arc4random_uniform(UInt32(self.rows))) )
+            if start.0 % self.rows > self.rows - n {
+                start.0 = start.0 - n
+            }
+            for i in 0..<n {
+                ship.append((start.0 + i, start.1))
+            }
+        case 1: //verticle
+            start = ( Int(arc4random_uniform(UInt32(self.rows))), Int(arc4random_uniform(UInt32(self.rows))) )
+            if start.1 % self.rows > self.rows - n {
+                start.1 = start.1 - n
+            }
+            for i in 0..<n {
+                ship.append((start.0, start.1 + i))
+            }
+        default:
+            break
+        }
+        return ship
+    }
+    
+    //Unique ship positioning function
+    private func buildUniqueShip(ofLength n: Int) -> [(Int, Int)] {
+        var uniqueShip: [(Int, Int)] = buildShip(ofLength: n)
+        var overlapping = true
+        while overlapping == true {
+            if shipIsUnique(arrA: allShips, arrB: uniqueShip) {
+                allShips += uniqueShip
+                overlapping = false
+            } else {
+                uniqueShip = buildShip(ofLength: n)
+            }
+        }
+        return uniqueShip
+    }
+    
+    func setUpP2Ships() {        
+        carPos = buildShip(ofLength: 5)
+        allShips += carPos
+        batPos = buildUniqueShip(ofLength: 4)
+        cruPos = buildUniqueShip(ofLength: 3)
+        subPos = buildUniqueShip(ofLength: 3)
+        desPos = buildUniqueShip(ofLength: 2)
+        
+        for x in carPos {
+            coordinates[x.0][x.1] = BattleshipBrain.Coordinate.occupied(.hidden, .carrier)
+        }
+        for x in batPos {
+            coordinates[x.0][x.1] = BattleshipBrain.Coordinate.occupied(.hidden, .battleship)
+        }
+        for x in cruPos {
+            coordinates[x.0][x.1] = BattleshipBrain.Coordinate.occupied(.hidden, .cruiser)
+        }
+        for x in subPos {
+            coordinates[x.0][x.1] = BattleshipBrain.Coordinate.occupied(.hidden, .submarine)
+        }
+        for x in desPos {
+            coordinates[x.0][x.1] = BattleshipBrain.Coordinate.occupied(.hidden, .destroyer)
+        }
+    }
+    
+    func strikeIsUnique(xy: (Int, Int)) -> Bool {
+        for strike in previousStrikes {
+            if (xy.0, xy.1) == strike {
+                return false
+            }
+        }
+        return true
+    }
+    
+    func chooseStrike() -> [Int] {
+        var uniqueStrike = false
+        var x = 0
+        var y = 0
+        while uniqueStrike == false {
+            x = Int(arc4random_uniform(UInt32(self.columns)))
+            y = Int(arc4random_uniform(UInt32(self.rows)))
+            if strikeIsUnique(xy: (x, y)) {
+                uniqueStrike = true
+            }
+        }
+        previousStrikes.append((x, y))
+        let coordArr = [x, y]
+        return coordArr
     }
 }

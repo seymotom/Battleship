@@ -406,7 +406,6 @@ class BattleshipViewController: UIViewController {
             messageLabel.text = "'' I have positioned my ships\nPress START to play me bitch. ''"
             startSwitchLabel.setTitle("START", for: .normal)
             cpuButtonLabel.setTitle("", for: .normal)
-            
         case .p1GameBeingPlayed:
             break
         case .p2BoardBeingSet:

@@ -6,7 +6,6 @@
 //  Copyright © 2016 C4Q. All rights reserved.
 //
 
-
 import Foundation
 
 class BattleshipBrain {
@@ -43,7 +42,6 @@ class BattleshipBrain {
     
     let rows: Int
     let columns: Int
-
     private var coordinates: [[Coordinate]]
     
     private var previousStrikes: [(Int, Int)] = []
@@ -166,7 +164,7 @@ class BattleshipBrain {
         return uniqueShip
     }
     
-    func setUpP2Ships() {        
+    func setUpP2Ships() {
         carPos = buildShip(ofLength: 5)
         allShips += carPos
         batPos = buildUniqueShip(ofLength: 4)

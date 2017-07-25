@@ -13,8 +13,8 @@ class BattleshipViewController: UIViewController {
     @IBOutlet weak var gridView: UIView!
     @IBOutlet weak var messageLabel: UILabel!
     
-    let p1Brain: BattleshipBrain
-    let p2Brain: BattleshipBrain
+    var p1Brain: BattleshipBrain
+    var p2Brain: BattleshipBrain
     
     enum GameState {
         enum UserOrCpu {
@@ -43,7 +43,11 @@ class BattleshipViewController: UIViewController {
         super.viewDidLoad()
         // better than viewDidLayoutSubviews but not all the way there
         self.view.layoutIfNeeded()
-        startGame()
+        setUpPlayerSettings()
+        setUpPlayerSettings()
+        let x = UIButton()
+        resetGame(x)
+        //startGame()
     }
     
     func buttonTapped(_ sender: UIButton) {
@@ -83,8 +87,11 @@ class BattleshipViewController: UIViewController {
                 p1Brain.placeCoordinate(r: r, c: c, shipType: .occupied(.hidden, .destroyer))
                 if buttonTappedCounter == 17 {
                     messageLabel.text = "P1 DESTROYER SET.\nALL P1 SHIPS NOW SET.\nPRESS SWITCH FOR PLAYER 2."
-                    cpuButtonLabel.setTitle("CPU as P2", for: .normal)
                     disableGameButtons(view: gridView)
+                    if cpuIsPlaying {
+                        messageLabel.text = "P1 DESTROYER SET.\nALL P1 SHIPS NOW SET. PRESS START TO PLAY."
+                        startSwitchLabel.setTitle("START", for: .normal)
+                    }
                 }
             default:
                 break
@@ -256,9 +263,7 @@ class BattleshipViewController: UIViewController {
         for row in 0..<p1Brain.rows {
             for col in 0..<p1Brain.columns {
                 
-                let rect = CGRect(origin: CGPoint(x: CGFloat(row) * side,
-                                                  y: CGFloat(col) * side),
-                                  size: CGSize(width: side - 1, height: side - 1))
+                let rect = CGRect(origin: CGPoint(x: CGFloat(row) * side, y: CGFloat(col) * side), size: CGSize(width: side - 1, height: side - 1))
                 let button = UIButton(frame: rect)
                 
                 // this flattens the 2d matrix into a sequence of numbers
@@ -267,14 +272,106 @@ class BattleshipViewController: UIViewController {
                 
                 let letter = String(Character(UnicodeScalar(65 + row)!))
                 button.setTitle("\(letter)\(col + 1)", for: UIControlState())
+                if p1Brain.rows == 12 {
+                    button.titleLabel?.font = UIFont(name: "System-Thin", size: 4.0)
+                    button.titleLabel?.adjustsFontSizeToFitWidth = true
+                }
                 button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
                 v.addSubview(button)
             }
         }
     }
     
-    @IBAction func resetGame(_ sender: UIButton) {
+    func setUpPlayerSettings() {
+        for v in gridView.subviews {
+            v.removeFromSuperview()
+        }
+        messageLabel.text = ""
+        startSwitchLabel.isHidden = true
+        let butWidth: CGFloat = gridView.bounds.size.width - 8
+        let butHeight: CGFloat = (gridView.bounds.size.height / 2) - 8
+        
+        for i in 0...1 {
+            let j = CGFloat(i)
+            let thisFrame = CGRect(origin: CGPoint(x: 4 , y: (j * (butHeight + 8)) + 4), size: CGSize(width: butWidth, height: butHeight))
+            let button = UIButton(frame: thisFrame)
+            button.tag = i + 1
+            switch button.tag {
+            case 1:
+                button.setTitle("Player 1 vs. Computer", for: .normal)
+                button.backgroundColor = UIColor.green
+            case 2:
+                button.setTitle("Player 1 vs. Player 2", for: .normal)
+                button.backgroundColor = UIColor.blue
+            default:
+                break
+            }
+            button.addTarget(self, action: #selector(playerButtonTapped), for: .touchUpInside)
+            gridView.addSubview(button)
+        }
+    }
+    
+    func setUpGridSettings() {
+        for v in gridView.subviews {
+            v.removeFromSuperview()
+        }
+        let butWidth: CGFloat = gridView.bounds.size.width - 8
+        let butHeight: CGFloat = (gridView.bounds.size.height / 3) - 8
+        
+        for i in 0...2 {
+            let j = CGFloat(i)
+            let thisFrame = CGRect(origin: CGPoint(x: 4 , y: (j * (butHeight + 8)) + 4), size: CGSize(width: butWidth, height: butHeight))
+            let button = UIButton(frame: thisFrame)
+            button.tag = i + 1
+            switch button.tag {
+            case 1:
+                button.setTitle("Easy - 8x8", for: .normal)
+                button.backgroundColor = UIColor.yellow
+            case 2:
+                button.setTitle("Medium - 10x10", for: .normal)
+                button.backgroundColor = UIColor.orange
+            case 3:
+                button.setTitle("Hard - 12x12", for: .normal)
+                button.backgroundColor = UIColor.red
+            default:
+                break
+            }
+            button.addTarget(self, action: #selector(gridSizeButtonTapped), for: .touchUpInside)
+            gridView.addSubview(button)
+        }
+    }
+    
+    func playerButtonTapped(_ sender: UIButton) {
+        switch sender.tag {
+        case 1:
+            setUpGridSettings()
+            cpuIsPlaying = true
+        case 2:
+            setUpGridSettings()
+        default:
+            break
+        }
+    }
+    
+    func gridSizeButtonTapped(_ sender: UIButton) {
+        switch sender.tag {
+        case 1:
+            self.p1Brain = BattleshipBrain(rows: 8, columns: 8)
+            self.p2Brain = BattleshipBrain(rows: 8, columns: 8)
+        case 2:
+            self.p1Brain = BattleshipBrain(rows: 10, columns: 10)
+            self.p2Brain = BattleshipBrain(rows: 10, columns: 10)
+        case 3:
+            self.p1Brain = BattleshipBrain(rows: 12, columns: 12)
+            self.p2Brain = BattleshipBrain(rows: 12, columns: 12)
+        default:
+            break
+        }
         startGame()
+    }
+    
+    @IBAction func resetGame(_ sender: UIButton) {
+        setUpPlayerSettings()
     }
     
     func startGame() {
@@ -288,8 +385,8 @@ class BattleshipViewController: UIViewController {
 
         stateOfTheGame = .p1BoardBeingSet
         buttonTappedCounter = 0
+        startSwitchLabel.isHidden = false
         startSwitchLabel.setTitle("SWITCH", for: .normal)
-        cpuButtonLabel.setTitle("", for: .normal)
     }
     
     func disableGameButtons(view: UIView) {
@@ -313,14 +410,21 @@ class BattleshipViewController: UIViewController {
     @IBAction func startSwitchTapped(_ sender: UIButton) {
         switch stateOfTheGame {
         case .p1BoardBeingSet:
-            p2DrawBoard()
-            messageLabel.text = "WELCOME TO BATTLESHIP PLAYER 2.\nPLACE YOUR CARRIER\nON 5 CONSECUTIVE SQUARES."
-            enableGameButtons(view: gridView)
-            stateOfTheGame = .p2BoardBeingSet(.user)
-            startSwitchLabel.setTitle("SWITCH->P1", for: .normal)
-            cpuButtonLabel.setTitle("", for: .normal)
-            buttonTappedCounter = 0
-            enableGameButtons(view: gridView)
+            if cpuIsPlaying {
+                disableGameButtons(view: gridView)
+                stateOfTheGame = .p2BoardBeingSet(.cpu)
+                p2Brain.setUpP2Ships()
+                messageLabel.text = "'' I have positioned my ships\nPress START to play me fool. ''"
+                startSwitchLabel.setTitle("START", for: .normal)
+            } else {
+                p2DrawBoard()
+                messageLabel.text = "WELCOME TO BATTLESHIP PLAYER 2.\nPLACE YOUR CARRIER\nON 5 CONSECUTIVE SQUARES."
+                enableGameButtons(view: gridView)
+                stateOfTheGame = .p2BoardBeingSet(.user)
+                startSwitchLabel.setTitle("SWITCH->P1", for: .normal)
+                buttonTappedCounter = 0
+                enableGameButtons(view: gridView)
+            }
             
         case .p2BoardBeingSet(.user):
             stateOfTheGame = .p1GameBeingPlayed
@@ -391,29 +495,6 @@ class BattleshipViewController: UIViewController {
         case .gameOver:
             break
 
-        }
-    }
-    
-    @IBOutlet weak var cpuButtonLabel: UIButton!
-    
-    @IBAction func playAgainstCpu(_ sender: UIButton) {
-        switch stateOfTheGame {
-        case .p1BoardBeingSet:
-            cpuIsPlaying = true
-            disableGameButtons(view: gridView)
-            stateOfTheGame = .p2BoardBeingSet(.cpu)
-            p2Brain.setUpP2Ships()
-            messageLabel.text = "'' I have positioned my ships\nPress START to play me bitch. ''"
-            startSwitchLabel.setTitle("START", for: .normal)
-            cpuButtonLabel.setTitle("", for: .normal)
-        case .p1GameBeingPlayed:
-            break
-        case .p2BoardBeingSet:
-            break
-        case .p2GameBeingPlayed:
-            break
-        case .gameOver:
-            break
         }
     }
 }

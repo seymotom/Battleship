@@ -10,7 +10,6 @@
 		1E906A6A1D8F0DF000851B7A /* BattleshipBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E906A691D8F0DF000851B7A /* BattleshipBrain.swift */; };
 		1ED8D76C1D8CA082007FD4C7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED8D76B1D8CA082007FD4C7 /* AppDelegate.swift */; };
 		1ED8D76E1D8CA082007FD4C7 /* BattleshipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED8D76D1D8CA082007FD4C7 /* BattleshipViewController.swift */; };
-		1ED8D7701D8CA082007FD4C7 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED8D76F1D8CA082007FD4C7 /* SecondViewController.swift */; };
 		1ED8D7731D8CA082007FD4C7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1ED8D7711D8CA082007FD4C7 /* Main.storyboard */; };
 		1ED8D7751D8CA082007FD4C7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1ED8D7741D8CA082007FD4C7 /* Assets.xcassets */; };
 		1ED8D7781D8CA082007FD4C7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1ED8D7761D8CA082007FD4C7 /* LaunchScreen.storyboard */; };
@@ -21,7 +20,6 @@
 		1ED8D7681D8CA082007FD4C7 /* Battleship.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Battleship.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1ED8D76B1D8CA082007FD4C7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1ED8D76D1D8CA082007FD4C7 /* BattleshipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleshipViewController.swift; sourceTree = "<group>"; };
-		1ED8D76F1D8CA082007FD4C7 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		1ED8D7721D8CA082007FD4C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1ED8D7741D8CA082007FD4C7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1ED8D7771D8CA082007FD4C7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -60,7 +58,6 @@
 			children = (
 				1ED8D76B1D8CA082007FD4C7 /* AppDelegate.swift */,
 				1ED8D76D1D8CA082007FD4C7 /* BattleshipViewController.swift */,
-				1ED8D76F1D8CA082007FD4C7 /* SecondViewController.swift */,
 				1E906A691D8F0DF000851B7A /* BattleshipBrain.swift */,
 				1ED8D7711D8CA082007FD4C7 /* Main.storyboard */,
 				1ED8D7741D8CA082007FD4C7 /* Assets.xcassets */,
@@ -143,7 +140,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E906A6A1D8F0DF000851B7A /* BattleshipBrain.swift in Sources */,
-				1ED8D7701D8CA082007FD4C7 /* SecondViewController.swift in Sources */,
 				1ED8D76C1D8CA082007FD4C7 /* AppDelegate.swift in Sources */,
 				1ED8D76E1D8CA082007FD4C7 /* BattleshipViewController.swift in Sources */,
 			);
